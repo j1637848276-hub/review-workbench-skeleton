@@ -87,6 +87,13 @@ Found something exploitable? **Open a private security advisory** on the
 repository rather than a public issue, and give a reasonable window before
 disclosing.
 
+CI runs gitleaks on every push. It has a narrow allowlist in `.gitleaks.toml`
+listing the test and CI fixtures one string at a time — deliberately not a
+blanket exemption for `tests/`, because a real secret in a test file is still a
+real secret. If your change adds a fixture that trips the scan, add that exact
+string with a comment saying what it is. Never add a value that is live
+anywhere.
+
 Things to be careful about in review, because they are the ones that have been
 wrong before:
 

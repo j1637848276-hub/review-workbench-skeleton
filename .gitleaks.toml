@@ -1,0 +1,51 @@
+title = "review-workbench-skeleton"
+
+# Keep every default gitleaks rule. This file only adds exceptions — it never
+# turns a rule off.
+[extend]
+useDefault = true
+
+[allowlist]
+description = """
+Deliberate test and CI fixtures.
+
+These are placeholder strings that exist because config validation rejects a
+JWT secret under 32 characters and a password under 12 — so the fixtures have
+to *look* like credentials to exercise the happy path. They are listed here
+one by one rather than by allowlisting `tests/` wholesale: a real secret
+committed to a test file is still a real secret, and a per-string allowlist
+means adding a new fixture is a conscious, reviewable act.
+
+If you fork this repository, delete the entries you no longer use. Never add a
+value here that is live anywhere.
+"""
+
+regexes = [
+  # tests/helpers/test_app.js — the secret every HTTP test signs tokens with
+  '''test-secret-that-is-long-enough-to-pass-validation''',
+
+  # tests/config_and_health.test.js — fixture for the config validation tests
+  '''a-secret-that-is-definitely-long-enough-32''',
+
+  # .github/workflows/ci.yml — present only so loadConfig() accepts it in CI
+  '''ci-secret-value-that-is-long-enough-to-pass''',
+
+  # Test passwords. Long enough to clear MIN_PASSWORD_LENGTH, and nothing else.
+  '''test-password-123''',
+  '''viewer-password-1''',
+  '''definitely-not-the-password''',
+  '''correct-horse-battery''',
+  '''same-password-12''',
+
+  # services/auth_service.js — DUMMY_HASH. An all-zero scrypt hash, verified
+  # against when the username does not exist so a missing account costs the
+  # same time as a wrong password. It is not a hash of anything.
+  '''scrypt\$65536\$8\$1\$A+==\$A+=''',
+]
+
+# Generated lockfiles: integrity hashes are high-entropy by construction and
+# are not secrets.
+paths = [
+  '''package-lock\.json''',
+  '''frontend/package-lock\.json''',
+]
