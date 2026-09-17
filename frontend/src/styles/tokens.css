@@ -1,0 +1,142 @@
+/**
+ * Design tokens.
+ *
+ * Direction: operational instrument panel. Warm paper ground, ink text,
+ * hairline rules instead of drop shadows, and density over air — an operator
+ * working a 300-document queue wants more rows on screen, not more padding.
+ * Colour is functional: the accent marks what is interactive, amber marks what
+ * needs a human, and nothing is coloured decoratively.
+ *
+ * Typography is a deliberate two-family pairing with no webfont: a grotesk
+ * system stack for prose and UI, a monospace stack for every number,
+ * identifier and timestamp. That split is doing real work — tabular figures
+ * keep columns aligned, and a monospaced document id is scannable in a way a
+ * proportional one is not.
+ *
+ * All colour is oklch: perceptually uniform, so a lightness step reads as the
+ * same step across hues, which is what keeps a generated scale from looking
+ * lumpy.
+ */
+
+:root {
+  /* ---------------------------------------------------------- surfaces */
+  --paper: oklch(98.6% 0.004 85);
+  --paper-sunk: oklch(96.4% 0.005 85);
+  --paper-raised: oklch(100% 0 0);
+  --paper-inverted: oklch(21% 0.014 262);
+
+  /* ---------------------------------------------------------- ink */
+  --ink: oklch(22% 0.014 262);
+  --ink-muted: oklch(48% 0.012 262);
+  --ink-faint: oklch(64% 0.01 262);
+  --ink-inverted: oklch(97% 0.003 85);
+
+  /* ---------------------------------------------------------- rules
+   * Hairlines, not shadows. Depth comes from overlap and inversion. */
+  --rule: oklch(88% 0.006 262);
+  --rule-strong: oklch(76% 0.008 262);
+
+  /* ---------------------------------------------------------- semantic
+   * accent = interactive. attention = needs a human. Never swapped. */
+  --accent: oklch(51% 0.135 252);
+  --accent-hover: oklch(44% 0.145 252);
+  --accent-wash: oklch(95% 0.024 252);
+
+  --attention: oklch(63% 0.148 62);
+  --attention-wash: oklch(96% 0.035 72);
+
+  --danger: oklch(53% 0.185 25);
+  --danger-wash: oklch(95.5% 0.03 25);
+
+  --ok: oklch(50% 0.105 155);
+  --ok-wash: oklch(95.5% 0.03 155);
+
+  /* ---------------------------------------------------------- type */
+  --font-ui:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Noto Sans', sans-serif;
+  --font-mono:
+    ui-monospace, 'SF Mono', 'Cascadia Mono', 'Roboto Mono', 'JetBrains Mono', Menlo, Consolas,
+    monospace;
+
+  /* A tight scale. Hierarchy comes from the jump between --text-lg and
+   * --text-display, not from six barely-distinguishable sizes. */
+  --text-micro: 0.6875rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.875rem;
+  --text-lg: 1.0625rem;
+  --text-display: clamp(1.5rem, 1.1rem + 1.4vw, 2.125rem);
+
+  --leading-tight: 1.2;
+  --leading-normal: 1.5;
+  --tracking-caps: 0.08em;
+
+  /* ---------------------------------------------------------- space
+   * A 4px base. Rhythm is intentionally uneven: --space-4 between related
+   * controls, --space-7 between sections. Uniform padding everywhere is what
+   * makes an interface read as a template. */
+  --space-1: 0.25rem;
+  --space-2: 0.375rem;
+  --space-3: 0.5rem;
+  --space-4: 0.75rem;
+  --space-5: 1rem;
+  --space-6: 1.5rem;
+  --space-7: 2.25rem;
+  --space-8: 3.5rem;
+
+  /* ---------------------------------------------------------- geometry
+   * Deliberately small and varied by role: inputs and buttons share a crisp
+   * 3px, only the viewer panel gets 6px. One radius on everything is another
+   * template tell. */
+  --radius-sharp: 2px;
+  --radius: 3px;
+  --radius-panel: 6px;
+
+  --shell-max: 96rem;
+  --sidebar-width: 13.5rem;
+
+  /* ---------------------------------------------------------- motion */
+  --duration-fast: 120ms;
+  --duration: 200ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Focus ring defined once. Every interactive element uses this exact ring,
+   * which is what makes keyboard navigation legible. */
+  --focus-ring: 0 0 0 2px var(--paper), 0 0 0 4px var(--accent);
+}
+
+/**
+ * Dark mode, opt-in via [data-theme="dark"] rather than prefers-color-scheme.
+ * Operators run this under fluorescent light next to paper documents, and
+ * matching the paper is the point — so light stays the default and dark is a
+ * deliberate choice, not an accident of an OS setting.
+ */
+[data-theme='dark'] {
+  --paper: oklch(19% 0.012 262);
+  --paper-sunk: oklch(16% 0.012 262);
+  --paper-raised: oklch(23.5% 0.014 262);
+  --paper-inverted: oklch(95% 0.004 85);
+
+  --ink: oklch(94% 0.004 85);
+  --ink-muted: oklch(70% 0.01 262);
+  --ink-faint: oklch(56% 0.012 262);
+  --ink-inverted: oklch(19% 0.012 262);
+
+  --rule: oklch(30% 0.012 262);
+  --rule-strong: oklch(40% 0.014 262);
+
+  /* Lifted lightness and reduced chroma: the same hues at light-mode values
+   * vibrate against a dark ground. */
+  --accent: oklch(72% 0.115 252);
+  --accent-hover: oklch(80% 0.1 252);
+  --accent-wash: oklch(28% 0.055 252);
+
+  --attention: oklch(78% 0.12 72);
+  --attention-wash: oklch(30% 0.055 62);
+
+  --danger: oklch(70% 0.145 25);
+  --danger-wash: oklch(28% 0.07 25);
+
+  --ok: oklch(74% 0.1 155);
+  --ok-wash: oklch(26% 0.05 155);
+}

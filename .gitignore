@@ -1,0 +1,44 @@
+node_modules/
+
+# Secrets — never commit. Copy .env.example instead.
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+.sshpass
+
+# Runtime data. The whole point of STORAGE_ROOT is that it holds real documents.
+#
+# Leading slashes matter here. An unanchored `storage/` matches at *any* depth,
+# so it would also exclude `lib/storage/` — the database layer and every
+# migration — and the published repository would not even start.
+/storage/
+/data/
+/logs/
+/backups/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.db
+
+# Build output
+/frontend/dist/
+/dist/
+
+# Test + tooling artifacts
+coverage/
+test-results/
+playwright-report/
+.eslintcache
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Local agent scratch
+.claude/settings.local.json
+tmp/

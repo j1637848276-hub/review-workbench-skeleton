@@ -1,0 +1,54 @@
+{
+  "name": "review-workbench-skeleton",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Skeleton for a batch document-review and monthly-reconciliation workbench: Express + node:sqlite backend, Vue 3 SPA, pluggable recognition providers.",
+  "license": "MIT",
+  "type": "commonjs",
+  "main": "server.js",
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "scripts": {
+    "start": "node --env-file=.env server.js",
+    "dev": "node --env-file=.env --watch server.js",
+    "migrate": "node scripts/migrate.js",
+    "users": "node scripts/manage_users.js",
+    "seed": "node --env-file=.env scripts/seed_demo.js",
+    "backup": "node scripts/backup_sqlite.js",
+    "test": "node --test --import=./tests/_stall_watchdog.mjs --test-timeout=60000 \"tests/**/*.test.js\"",
+    "test:e2e": "node node_modules/@playwright/test/cli.js test",
+    "lint": "eslint .",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "build:frontend": "npm --prefix frontend run build"
+  },
+  "keywords": [
+    "express",
+    "sqlite",
+    "vue3",
+    "skeleton",
+    "template",
+    "ocr",
+    "document-review",
+    "reconciliation",
+    "audit-log"
+  ],
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "decimal.js": "^10.6.0",
+    "exceljs": "^4.4.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.0.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.60.0",
+    "eslint": "^10.3.0",
+    "eslint-plugin-vue": "^10.9.1",
+    "globals": "^17.6.0",
+    "prettier": "^3.8.3",
+    "vue-eslint-parser": "^10.4.0"
+  }
+}

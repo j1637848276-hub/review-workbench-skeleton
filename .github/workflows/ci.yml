@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# A new push to the same ref cancels the previous run. Saves minutes and stops
+# a queue of stale runs from reporting after the one that matters.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Node 22.5+ is a hard requirement: `node:sqlite` does not exist before
+      # it, and `--env-file` landed in the same era.
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            frontend/package-lock.json
+
+      - name: Install backend dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Install frontend dependencies
+        run: npm ci
+        working-directory: frontend
+
+      # Build before the tests, not after. Any test that inspects build output
+      # silently skips when `dist/` is absent, so a build that runs last means
+      # those checks never actually execute in CI — a green tick for a gate
+      # that was never opened.
+      - name: Build frontend
+        run: npm run build
+        working-directory: frontend
+
+      - name: Test
+        run: npm test
+        env:
+          # The suite creates its own temp storage per test; these only need to
+          # be present and valid so config validation passes.
+          JWT_SECRET: ci-secret-value-that-is-long-enough-to-pass
+          LOG_LEVEL: error
+
+      - name: Upload test artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-artifacts
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 7
+          if-no-files-found: ignore
+
+  # A secret committed to a public repository is compromised the moment it is
+  # pushed, and scrubbing history afterwards does not un-compromise it. Cheap
+  # to run, so it runs on every push.
+  secret-scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Scan for committed secrets
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

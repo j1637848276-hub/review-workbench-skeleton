@@ -1,0 +1,8 @@
+node_modules/
+frontend/dist/
+storage/
+coverage/
+test-results/
+playwright-report/
+package-lock.json
+*.sqlite

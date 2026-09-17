@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- The same notched mark as the app shell: a sheet with a folded corner. -->
+  <rect width="32" height="32" rx="4" fill="#1f2933" />
+  <path d="M8 7h12l4 4v8.5L19.5 25H8z" fill="#e0a032" />
+  <path d="M20 7v4h4z" fill="#1f2933" opacity=".35" />
+  <path d="M11 14h10M11 18h7" stroke="#1f2933" stroke-width="1.6" stroke-linecap="square" />
+</svg>

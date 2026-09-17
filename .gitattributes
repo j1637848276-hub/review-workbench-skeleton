@@ -1,0 +1,14 @@
+# Normalise line endings in the repository, check out native on each platform.
+# Without this, a Windows contributor's first commit reformats every file and
+# the diff is unreviewable.
+* text=auto eol=lf
+
+# Shell scripts must stay LF even on Windows, or they will not execute.
+*.sh text eol=lf
+
+*.png binary
+*.jpg binary
+*.webp binary
+*.pdf binary
+*.xlsx binary
+*.sqlite binary
